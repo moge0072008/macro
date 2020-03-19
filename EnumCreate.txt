@@ -1,0 +1,37 @@
+
+'Enum作成して、worksheet.add　に貼り付け
+Sub EnumCreate()
+
+Dim objRow As Long
+Dim objStr As String
+Dim StackStr As String
+Dim Col As Long
+Dim maxCol As Long
+Dim NewWorkSheet As Worksheet
+
+With ActiveSheet
+objRow = InputBox("対象の行を選択してください。", Default:=1)
+maxCol = .Cells(objRow, Columns.Count).End(xlToLeft).Column
+
+Set NewWorkSheet = Worksheets.Add()
+NewWorkSheet.Name = "Enum"
+
+For Col = 1 To maxCol
+
+Dim ChrNum As Long: ChrNum = 65 'Char(65)=A～Char(90)＝Z
+
+If Col Mod 10 = 0 Then ChrNum = ChrNum + 1
+If ChrNum = 91 Then ChrNum = 97 'Char(97)=a に移動
+
+    objStr = Chr(ChrNum) & Col & .Cells(objRow, Col)
+    StackStr = StackStr & vbCrLf & objStr
+    NewWorkSheet.Cells(Col, 1) = objStr
+
+Next Col
+
+NewWorkSheet.Cells(1, 2) = StackStr
+
+End With
+
+
+End Sub
