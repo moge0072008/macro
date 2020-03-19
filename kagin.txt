@@ -51,7 +51,9 @@ Dim D As String: D = Format(Date, "dd")
 Stop
     Dim Ks As New Keys
     Driver.SendKeys Ks.Control, Ks.Shift
-    
+
+
+'以下、objtagをgetするのに利用するコード    
 'Dim Tags As Object
 '    Set Tags = Driver.FindElementsByTag("*")
 'Dim Tag As WebElement
@@ -76,6 +78,8 @@ Stop
 
 
 End Sub
+
+
 Sub wsWrtOut(Str, Col As Long)
 
 With Sheet1
@@ -87,16 +91,13 @@ With Sheet1
     
 End With
 
-
 End Sub
 
-
+’以下、debug.printに渡した引数を全てpurintout
 Sub Prnt(ParamArray Pr())
 
 For Each P In Pr
-
-Debug.Print P
-
+	Debug.Print P
 Next
 
 End Sub
