@@ -1,0 +1,103 @@
+ '鹿銀口座Open
+Sub test()
+
+Dim Driver As New Selenium.WebDriver
+Driver.Start "chrome"
+Dim url As String
+    url = "https://www.kagin.co.jp/houjin/201_service/fb-web/fb-web_login.html"
+Driver.Get url
+
+Dim loginPath As String
+    loginPath = "#pbNestDiv235777 > div > div > div > div > div > a > img"
+Dim Css As WebElement
+    Driver.FindElementByCss(loginPath).Click 'FbWebサービスクリック
+    Driver.SwitchToNextWindow '開いたウィンドウに移動
+Dim ID As WebElement
+    Set ID = Driver.FindElementByName("CORP_ID") '会社番号入力
+    ID.Clear
+    ID.SendKeys "2008739192"
+Dim UserName As WebElement
+    Set UserName = Driver.FindElementByName("USR_NAME") 'ユーザー名入力
+    UserName.Clear
+    UserName.SendKeys "hukuzaki"
+Dim Pass As WebElement
+    Set Pass = Driver.FindElementByName("MASK_LOGIN_PWD") 'Pass入力
+    Pass.Clear
+    Pass.SendKeys "keiri1150"
+
+    Driver.FindElementByName("ACT_doLogin").Click 'ログインクリック
+
+Dim Clk As String
+    Clk = "#myslidemenu > ul > li:nth-child(2) > div > a"
+    Driver.FindElementByCss(Clk).Click '口座情報照会クリック
+    Driver.Wait (1500) '画面開き待ち
+    Clk = "#myslidemenu > ul > li:nth-child(2) > ul > li:nth-child(2) > a"
+    Driver.FindElementByCss(Clk).Click '入出金明細クリック
+
+Dim Y As String: Y = Format(Date, "yyyy")
+Dim M As String: M = Format(Date, "mm")
+Dim D As String: D = Format(Date, "dd")
+    Dim Ent As String
+    Ent = "SEARCH_FROM_YEAR"
+    Driver.FindElementByName(Ent).SendKeys (Y)
+    Ent = "SEARCH_FROM_MONTH"
+    Driver.FindElementByName(Ent).SendKeys (M)
+    Ent = "SEARCH_FROM_DAY"
+    Driver.FindElementByName(Ent).SendKeys (D)
+    
+    Clk = "#mainContents > form > div.searchArea > div > div > span > a"
+    Driver.FindElementByCss(Clk).Click
+
+Stop
+    Dim Ks As New Keys
+    Driver.SendKeys Ks.Control, Ks.Shift
+    
+'Dim Tags As Object
+'    Set Tags = Driver.FindElementsByTag("*")
+'Dim Tag As WebElement
+'    i = 1
+'    Sheet1.Cells.Clear
+'
+'    For Each Tag In Tags
+'
+'        'Debug.Print Tag.Text, Tag.Attribute("outerhtml")
+'
+'        Sheet1.Cells(i, 1) = Tag.tagName
+'        Sheet1.Cells(i, 2) = Replace(Tag.Text, vbCrLf, "")
+'        Sheet1.Cells(i, 2).WrapText = False
+'
+'        i = i + 1
+'    Next
+'
+'
+'
+'Stop
+
+
+
+End Sub
+Sub wsWrtOut(Str, Col As Long)
+
+With Sheet1
+
+    Do
+        .Cells(Row, Col) = Str
+
+    Loop Until Str = ""
+    
+End With
+
+
+End Sub
+
+
+Sub Prnt(ParamArray Pr())
+
+For Each P In Pr
+
+Debug.Print P
+
+Next
+
+End Sub
+
