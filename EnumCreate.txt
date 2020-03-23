@@ -1,37 +1,54 @@
-
 'Enum作成して、worksheet.add　に貼り付け
 Sub EnumCreate()
 
-Dim objRow As Long
+
 Dim objStr As String
 Dim StackStr As String
-Dim Col As Long
-Dim maxCol As Long
-Dim NewWorkSheet As Worksheet
 
 With ActiveSheet
-objRow = InputBox("対象の行を選択してください。", Default:=1)
-maxCol = .Cells(objRow, Columns.Count).End(xlToLeft).Column
+    Dim objRow As Long: objRow = InputBox("対象の行を選択してください。", Default:=1)
+    Dim maxCol As Long: maxCol = .Cells(objRow, Columns.Count).End(xlToLeft).Column
+    Dim NewWorkSheet As Worksheet: Set NewWorkSheet = Worksheets.Add(): NewWorkSheet.Name = "Enum"
+    Dim ChrNum As Long: ChrNum = 65 'Char(65)=A～Char(90)＝Z
+        
+        Dim Col As Long
+        For Col = 1 To maxCol
+            
+        If Col Mod 10 = 0 Then ChrNum = ChrNum + 1
+        If ChrNum = 91 Then ChrNum = 97 'Char(97)=a に移動,A~Zまで大文字を使い切った場合のみ
+            
+            Dim Atmpt As String: Atmpt = symbolReplace(.Cells(objRow, Col))
+            objStr = Chr(ChrNum) & Col & Atmpt
+            StackStr = StackStr & vbLf & objStr
+            NewWorkSheet.Cells(Col, 1) = objStr
+        
+        Next Col
 
-Set NewWorkSheet = Worksheets.Add()
-NewWorkSheet.Name = "Enum"
-
-For Col = 1 To maxCol
-
-Dim ChrNum As Long: ChrNum = 65 'Char(65)=A～Char(90)＝Z
-
-If Col Mod 10 = 0 Then ChrNum = ChrNum + 1
-If ChrNum = 91 Then ChrNum = 97 'Char(97)=a に移動
-
-    objStr = Chr(ChrNum) & Col & .Cells(objRow, Col)
-    StackStr = StackStr & vbCrLf & objStr
-    NewWorkSheet.Cells(Col, 1) = objStr
-
-Next Col
-
-NewWorkSheet.Cells(1, 2) = StackStr
-
+    NewWorkSheet.Cells(1, 2) = StackStr
+    NewWorkSheet.Columns.AutoFit
+    NewWorkSheet.Columns(2).ColumnWidth = 30
+    
 End With
 
 
 End Sub
+
+'記号30種を_にReplace、_は名前定義で使用可能なため
+
+Function symbolReplace(objStr As String) As String
+
+Dim arrSymbol As Variant
+'記号30種をarrSymbolに代入
+arrSymbol = Array(" ", "!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "\", "]", "^", "_", "`", "{", "|", "}", "~")
+
+For Each arr In arrSymbol
+    
+    '全角を半角に変換
+    objStr = StrConv(objStr, vbNarrow)
+    objStr = Replace(objStr, arr, "_")
+
+Next arr
+
+symbolReplace = objStr
+
+End Function
