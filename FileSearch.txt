@@ -1,0 +1,43 @@
+'選択したフォルダ以下全てのサブフォルダを含むファイルを再帰的に取得
+'VBE→ツール→参照設定→MicrosoftScriptingRuntimeを参照設定
+'FileSystemObjectを利用するため
+
+Sub FileSearch()
+
+'dialogで対象のフォルダを選択させる
+Dim Dlg As FileDialog: Set Dlg = Application.FileDialog(msoFileDialogFolderPicker)
+
+'フォルダ選択がキャンセルの場合、終了
+If Dlg.Show = False Then Exit Sub
+
+Dim Fld_path As String: Fld_path = Dlg.SelectedItems(1)
+Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
+Dim Folder As Folder: Set Folder = fso.GetFolder(Fld_path)
+
+Call GetFile(Folder)
+
+End Sub
+
+Sub GetFile(ByVal Folder As Folder)
+
+Dim FolderSub As Folder
+Dim File As File
+
+'サブフォルダがあれば、再度そのサブフォルダのパスを元にそのサブフォルダを呼び出す
+'これが再帰的の所以
+
+For Each FolderSub In Folder.SubFolders
+
+    Debug.Print FolderSub.Name
+    Call GetFile(FolderSub)
+    
+Next FolderSub
+
+For Each File In Folder.Files
+
+'ここにFILEに対して行いたい処理を記述する
+Debug.Print File.Name
+
+Next File
+
+End Sub
