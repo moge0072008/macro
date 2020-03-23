@@ -1,0 +1,17 @@
+'選択範囲の半角スペース・全角スペースを全て削除
+Sub selctionSpaceDelete()
+
+  Dim Rng As Range
+  Dim txt As String
+      
+  For Each Rng In Selection.Cells
+    
+    txt = Rng.Value
+    txt = Replace(txt, " ", "")
+    txt = Replace(txt, "　", "")
+    Rng.Value = txt
+  
+  Next Rng
+
+  
+End Sub
